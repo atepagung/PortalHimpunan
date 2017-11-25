@@ -18,3 +18,32 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/testingUp', function() {
+	return view('testing.testUp');
+});
+
+Route::resource('communities', 'CommunityController');
+
+
+use Illuminate\Http\Request;
+
+Route::post('/testingUp', function(Request $request) {
+	/*$file = $request->file('image');
+	echo "<pre>";
+	var_dump($file);
+	echo "</pre>";
+	die();*/
+	$path = $request->image->storeAs('image', 'agung.jpg');
+	return $path;
+});
+
+Route::get('/hehe', function() {
+	$hehe = "<img src=".asset('storage/image/123456aaa_pp.jpg').">";
+	//$hehe = asset('storage/image/agung.jpg');
+	echo "<pre>";
+	var_dump($hehe);
+	echo "</pre>";
+	die();
+	//return 0;
+});

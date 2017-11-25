@@ -3,9 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use App\Profile;
+use App\Picture;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Exception;
 
 class RegisterController extends Controller
 {
@@ -48,7 +53,7 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
         ]);
@@ -62,10 +67,52 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]);
+
+        try {
+
+            DB::beginTransaction();
+
+            $waha = User::create([
+                'username' => $data['username'],
+                'email' => $data['email'],
+                'password' => bcrypt($data['password']),
+                'role_id' => 0
+            ]);
+
+
+            if (isset($data['image'])) {
+                $path = $data['image']->storeAs('storage/image', $waha->username.'_pp.jpg');
+            }else {
+                throw new Exception("Error Processing Request", 1);
+            }
+            
+            Picture::create([
+                'link' => $path,
+                'user_id' => $waha->id,
+                'picturable_id' => 0,
+                'picturable_type' => 'hehe',
+            ]);
+
+            Profile::create([
+                'user_id' => $waha->id,
+                'npm' => $data['npm'],
+                'firstname' => $data['firstname'],
+                'surname' => $data['surname'],
+                'JK' => $data['JK'],
+                'date_of_birth' => $data['date_of_birth'],
+                'address' => $data['address'],
+                'phone' => $data['phone'],
+                'pp' => $path,
+                'about_me' => $data['about_me'],
+            ]);
+
+            DB::commit();
+
+        }catch (Exception $e) {
+            DB::rollBack();
+            echo 'Message : '.$e->getMessage();
+        }
+
+        return $waha;
     }
 }
