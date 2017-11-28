@@ -25,6 +25,10 @@ Route::get('/testingUp', function() {
 
 Route::resource('communities', 'CommunityController');
 
+Route::get('communities/{id}/delete-member/{user_id}', 'CommunityController@deleteMember');
+
+Route::resource('post', 'PostController');
+
 
 use Illuminate\Http\Request;
 
