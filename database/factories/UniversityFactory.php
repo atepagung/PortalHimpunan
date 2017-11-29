@@ -19,5 +19,6 @@ $factory->define(App\University::class, function (Faker $faker) {
         'code' => $faker->unique()->buildingNumber,
         'name' => $faker->unique()->name,
         'location' => $faker->unique()->address,
+        'town' => $faker->unique()->address,
     ];
 });

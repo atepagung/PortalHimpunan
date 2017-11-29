@@ -12,6 +12,26 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <style>
+        .post-btn{
+            background: red;
+            display: block;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+            border-radius: 50%;
+            -webkit-border-radius: 50%;
+            text-decoration: none;
+            transition: ease all 0.3s;
+            position: fixed;
+            right: 30px;
+            bottom: 30px;
+        }
+    </style>
 </head>
 <body>
     <div id="app">
@@ -70,8 +90,12 @@
                 </div>
             </div>
         </nav>
-
+        
         @yield('content')
+        
+        @if(Auth::check())
+            <a href="/testingPost" class="post-btn">+</a>
+        @endif
     </div>
 
     <!-- Scripts -->

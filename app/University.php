@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class University extends Model
 {
     protected $table = 'universities';
-    protected $fillable = ['code', 'name', 'location'];
+    protected $fillable = ['code', 'name', 'location', 'town'];
 
     public function majors()
     {

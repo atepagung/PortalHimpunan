@@ -17,7 +17,8 @@ class CreateUniversitiesTable extends Migration
             $table->increments('id');
             $table->string('code')->unique();
             $table->string('name');
-            $table->string('location');
+            $table->text('location');
+            $table->string('town');
             $table->timestamps();
 
         });

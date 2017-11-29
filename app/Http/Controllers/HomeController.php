@@ -23,6 +23,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $posts = \App\Post::where('visibility',1)->with('user')->with('post_type')->get();
+        
+        return view('home', ['posts' => $posts]);
     }
 }

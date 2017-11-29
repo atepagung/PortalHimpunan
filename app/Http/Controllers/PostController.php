@@ -8,6 +8,12 @@ use App\Post_Type;
 
 class PostController extends Controller
 {
+
+    function __construct()
+    {
+        $this->middleware('auth')->except('show');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -30,12 +36,9 @@ class PostController extends Controller
      */
     public function create()
     {
-        $Post_Type = Post_Type::get();
+        $post_types = \App\Post_Type::get();
 
-        echo "<pre>";
-        var_dump($Post_Type);
-        echo "</pre>";
-        die();
+        return view('testing.testingPost', ['post_types' => $post_types]);
     }
 
     /**
@@ -62,7 +65,11 @@ class PostController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
             echo "Message: ".$e->getMessage();
+            die();
         }
+
+        return redirect()->route('home');
+
     }
 
     /**
@@ -73,12 +80,9 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = Post::find($id);
+        $post = Post::with('comments')->find($id);
 
-        echo "<pre>";
-        var_dump($post);
-        echo "</pre>";
-        die();
+        return view('testing.testShowPost', ['post' => $post]);
     }
 
     /**
